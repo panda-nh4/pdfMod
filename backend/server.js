@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import userRoutes from "./routes/userRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
+import shareRoute from "./routes/shareRoute.js"
 import { noEndpoint, errorHandler } from "./middleware/errorMiddleware.js";
 import connectDB from "./config/db.js";
 dotenv.config();
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use("/api/user", userRoutes);
 app.use("/api/file", fileRoutes);
+app.use("/share", shareRoute);
 if (process.env.DEV === "true") {
   app.get("/", (req, res) => res.send("Api home"));
 } else {

@@ -8,6 +8,7 @@ const fileSchema = mongoose.Schema({
   filePath: {
     type: String,
     required: true,
+    unique: true,
   },
   originalFilePath: {
     type: String,

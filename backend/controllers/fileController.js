@@ -72,23 +72,32 @@ const extractPages = expressAsyncHandler(async (req, res) => {
     "modified",
     req.body.fileName.slice(0, -4) + " - Modified.pdf"
   );
-  const fileBytes = fs.readFileSync(file);
+  let fileBytes;
+  try {
+    fileBytes = fs.readFileSync(file);
+  } catch (err) {
+    throw new Error("File not found.");
+  }
   const pdfDoc = await PDFDocument.load(fileBytes);
   //   const pages = pdfDoc.getPages()
   const newPdfDoc = await PDFDocument.create();
-  for (let i = 0; i < pagesAndOrder.length; i++) {
-    const [selectedPage] = await newPdfDoc.copyPages(pdfDoc, [
-      pagesAndOrder[i],
-    ]);
-    newPdfDoc.addPage(selectedPage);
+  try {
+    for (let i = 0; i < pagesAndOrder.length; i++) {
+      const [selectedPage] = await newPdfDoc.copyPages(pdfDoc, [
+        pagesAndOrder[i],
+      ]);
+      newPdfDoc.addPage(selectedPage);
+    }
+  } catch (err) {
+    throw new Error("Bad indices");
   }
   const pdfBytes = await newPdfDoc.save();
   fs.writeFileSync(destFile, pdfBytes);
-  const protocol=process.env.DEV==="true"?"http://":"https://"
+  const protocol = process.env.DEV === "true" ? "http://" : "https://";
   res
     .status(200)
     .json(
-      "http://" +
+      protocol +
         req.get("host") +
         "/api/file/download?fileName=" +
         encodeURIComponent(req.body.fileName.slice(0, -4) + " - Modified.pdf")
