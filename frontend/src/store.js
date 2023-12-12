@@ -10,7 +10,7 @@ const store = configureStore({
     getDefaultMiddleware({ serializableCheck: false }).concat(
       apiSlice.middleware
     ),
-  devTools: process.env.Dev === "true",
+  devTools: true,
 });
 
 export default store;

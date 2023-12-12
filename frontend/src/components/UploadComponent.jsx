@@ -3,24 +3,28 @@ import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useUploadMutation } from "../slices/publicApiSlice";
-import { resetPublicState, setLocalFilePath, setUploaded } from "../slices/publicSlice";
+import {
+  resetPublicState,
+  setLocalFilePath,
+  setUploaded,
+} from "../slices/publicSlice";
 import { toast } from "react-toastify";
 const UploadComponent = () => {
-  const [fileName, setFileName] = useState("");
+  const [fileName, setFileName] = useState([]);
   const [upload, { isLoading }] = useUploadMutation();
   const dispatch = useDispatch();
   const localFilePath = useSelector((state) => state.public.localFilePath);
-  if (localFilePath && localFilePath !== fileName) setFileName(localFilePath);
   const uploadFiles = async () => {
-    if (fileName === "") {
+    if (fileName.length === 0) {
       toast.error("Select a file first.");
-    } else {
+    }else if(localFilePath===fileName[0].name){toast.error("File already uploaded.")} 
+    else {
       var formData = new FormData();
 
       formData.append("files", fileName[0]);
       try {
-        dispatch(resetPublicState())
         const res = await upload(formData).unwrap();
+        dispatch(resetPublicState());
         toast.success("File uploaded");
         dispatch(setUploaded(res.new_name));
         dispatch(setLocalFilePath(fileName[0].name));
@@ -66,7 +70,7 @@ const UploadComponent = () => {
           display: "flex",
         }}
       >
-        {localFilePath?`Current uploaded file is ${fileName}`:""} 
+        {localFilePath ? `Current uploaded file is ${localFilePath}` : ""}
       </div>
       <div
         style={{
