@@ -2,8 +2,6 @@ import { Stepper } from "@mui/material";
 import { Step } from "@mui/material";
 import { StepLabel } from "@mui/material";
 import { Button } from "@mui/material";
-import { Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
 import { useState } from "react";
 import UploadComponent from "../components/UploadComponent";
 import SelectPages from "../components/SelectPages";
@@ -14,18 +12,7 @@ import { toast } from "react-toastify";
 import { useLazyViewFileQuery } from "../slices/publicApiSlice";
 import { resetPublicState, setUploadedFileData } from "../slices/publicSlice";
 import { useNavigate } from "react-router-dom";
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "100%",
-  },
-  button: {
-    marginRight: theme.spacing(1),
-  },
-  instructions: {
-    marginTop: theme.spacing(1),
-    marginBottom: theme.spacing(1),
-  },
-}));
+
 
 function getSteps() {
   return ["Upload", "Select Pages", "Re-order Pages", "Done"];
@@ -46,7 +33,6 @@ function getStepContent(step) {
   }
 }
 const ProcessScreen = () => {
-  const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const dispatch = useDispatch();
@@ -107,7 +93,7 @@ const ProcessScreen = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div style={{width:"100%"}}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -122,7 +108,7 @@ const ProcessScreen = () => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Button onClick={handleReset} className={classes.button}>
+            <Button onClick={handleReset}>
               Start Again
             </Button>
           </div>
@@ -138,7 +124,7 @@ const ProcessScreen = () => {
               <Button
                 disabled={activeStep === 0}
                 onClick={handleBack}
-                className={classes.button}
+                
               >
                 Back
               </Button>
@@ -148,7 +134,6 @@ const ProcessScreen = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleNext}
-                  className={classes.button}
                   disabled={disableDownload}
                 >
                   Download
@@ -158,9 +143,7 @@ const ProcessScreen = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleNext}
-                  className={classes.button}
                 >
-                  {" "}
                   Next
                 </Button>
               )}
