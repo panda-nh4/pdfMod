@@ -58,7 +58,7 @@ const ProcessScreen = () => {
 
           setActiveStep((prevActiveStep) => prevActiveStep + 1);
         } catch (err) {
-          if (err.status === 500) toast.error("Network Error");
+          if (err.status === 500) toast.error("Server Error");
           else toast.error(err?.data?.message || err.error);
         }
       }

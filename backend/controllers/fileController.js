@@ -91,8 +91,13 @@ const extractPages = expressAsyncHandler(async (req, res) => {
   } catch (err) {
     throw new Error("Bad indices");
   }
+  
   const pdfBytes = await newPdfDoc.save();
-  fs.writeFileSync(destFile, pdfBytes);
+  try{
+  fs.writeFileSync(destFile, pdfBytes);}
+  catch(err){
+    throw new Error("Unable to write to file.")
+  }
   const protocol = process.env.DEV === "true" ? "http://" : "https://";
   res
     .status(200)

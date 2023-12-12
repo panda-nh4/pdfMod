@@ -25,7 +25,7 @@ const UploadComponent = () => {
         dispatch(setUploaded(res.new_name));
         dispatch(setLocalFilePath(fileName[0].name));
       } catch (err) {
-        if (err.status === 500) toast.error("Network Error");
+        if (err.status === 500) toast.error("Server Error");
         else toast.error(err?.data?.message || err.error);
       }
     }

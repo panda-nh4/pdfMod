@@ -3,6 +3,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useExtractMutation } from "../slices/publicApiSlice";
 import { setDownloadLink } from "../slices/publicSlice";
+import { toast } from "react-toastify";
 const DownloadComponent = () => {
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const selectedPages = useSelector((state) => state.public.selectedPages);
@@ -22,7 +23,7 @@ const DownloadComponent = () => {
       const res = await extract(body).unwrap();
       dispatch(setDownloadLink(res.downloadLink));
     } catch (err) {
-      if (err.status === 500) toast.error("Network Error");
+      if (err.status === 500) toast.error("Server Error");
       else toast.error(err?.data?.message || err.error);
     }
   };
