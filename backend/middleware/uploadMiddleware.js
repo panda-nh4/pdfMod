@@ -32,7 +32,7 @@ const uploadMiddleware = (req, res, next) => {
       }
       files.forEach((file) => {
         const allowedTypes = ["application/pdf"];
-        const maxSize = 10 * 1024 * 1024 * 1024;
+        const maxSize = 200 * 1024 * 1024;
 
         if (!allowedTypes.includes(file.mimetype)) {
           errors.push(`Invalid file type: ${file.originalname}`);
