@@ -17,8 +17,9 @@ const UploadComponent = () => {
   const uploadFiles = async () => {
     if (fileName.length === 0) {
       toast.error("Select a file first.");
-    }else if(localFilePath===fileName[0].name){toast.error("File already uploaded.")} 
-    else {
+    } else if (localFilePath === fileName[0].name) {
+      toast.error("File already uploaded.");
+    } else {
       var formData = new FormData();
 
       formData.append("files", fileName[0]);
@@ -30,6 +31,7 @@ const UploadComponent = () => {
         dispatch(setLocalFilePath(fileName[0].name));
       } catch (err) {
         if (err.status === 500) toast.error("Server Error");
+        else if (err.status === 413) toast.error("File too large Error");
         else toast.error(err?.data?.message || err.error);
       }
     }
