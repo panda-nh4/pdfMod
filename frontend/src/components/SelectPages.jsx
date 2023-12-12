@@ -49,7 +49,7 @@ const SelectPages = () => {
             file={pdfURI}
             onLoadSuccess={({ numPages }) => loadedDoc(numPages)}
           >
-            <Grid container columns={{ xs: 2, sm: 8, md: 24 }}>
+            <Grid container columns={{ xs: 2, sm: 8, md: 20 }}>
               {pages.map((_, index) => (
                 <Grid item xs={2} sm={4} md={4} key={index}>
                   <div

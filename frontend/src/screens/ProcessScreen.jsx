@@ -51,13 +51,13 @@ const ProcessScreen = () => {
         toast.error("Upload file first");
       } else {
         try {
+          setActiveStep((prevActiveStep) => prevActiveStep + 1);
           const res = await view({ fileName: uploadedFileName }).unwrap();
           const resBlob = new Blob([res]);
           const pdfURI = URL.createObjectURL(resBlob);
           dispatch(setUploadedFileData(pdfURI));
-
-          setActiveStep((prevActiveStep) => prevActiveStep + 1);
         } catch (err) {
+          setActiveStep((prevActiveStep) => prevActiveStep - 1);
           if (err.status === 500) toast.error("Server Error");
           else toast.error(err?.data?.message || err.error);
         }
