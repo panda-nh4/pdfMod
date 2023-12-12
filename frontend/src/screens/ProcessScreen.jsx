@@ -56,7 +56,7 @@ const ProcessScreen = () => {
   const uploadedFileName = useSelector(
     (state) => state.public.uploadedFileName
   );
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const disableDownload =
     activeStep === steps.length - 1 ? (downloadLink ? false : true) : false;
@@ -84,17 +84,14 @@ const ProcessScreen = () => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
     } else if (activeStep == 2) {
-      console.log("Reorder part");
       if (selectedPages === null || selectedPages.length === 0)
         toast.error("Select at least one page.");
       else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
     } else if (activeStep == 3) {
-      console.log("Download part");
-      if (downloadLink === null) {
-      }
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      window.open(downloadLink, "_blank");
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -105,10 +102,9 @@ const ProcessScreen = () => {
   };
 
   const handleReset = () => {
-    dispatch(resetPublicState())
+    dispatch(resetPublicState());
     setActiveStep(0);
-    navigate("/")
-    
+    navigate("/");
   };
 
   return (
@@ -126,12 +122,8 @@ const ProcessScreen = () => {
       </Stepper>
       <div>
         {activeStep === steps.length ? (
-          <div >
-            <Button
-              onClick={handleReset}
-              className={classes.button}
-              
-            >
+          <div>
+            <Button onClick={handleReset} className={classes.button}>
               Start Again
             </Button>
           </div>
@@ -151,20 +143,28 @@ const ProcessScreen = () => {
               >
                 Back
               </Button>
-              
-                {activeStep === steps.length - 1 ? <Button
-                variant="contained"
-                color="primary"
-                onClick={handleNext}
-                className={classes.button}
-                disabled={disableDownload}
-                href={downloadLink}
-              >Download</Button> :<Button
-              variant="contained"
-              color="primary"
-              onClick={handleNext}
-              className={classes.button}
-            > Next</Button>}
+
+              {activeStep === steps.length - 1 ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                  disabled={disableDownload}
+                >
+                  Download
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleNext}
+                  className={classes.button}
+                >
+                  {" "}
+                  Next
+                </Button>
+              )}
             </div>
             <div>{getStepContent(activeStep)}</div>
           </div>

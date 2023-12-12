@@ -9,31 +9,31 @@ const DraggablePageCard = ({ index, value }) => {
   const selectedPages = useSelector((state) => state.public.selectedPages);
   const onDropped = (dropRes) => {
     let temp = [...selectedPages];
-    const dragIndex=selectedPages.indexOf(value)
-    const dropIndex=selectedPages.indexOf(dropRes)
-    console.log(temp);
-    console.log(`Dropping ${value} into ${dropRes}`);
+    const dragIndex = selectedPages.indexOf(value);
+    const dropIndex = selectedPages.indexOf(dropRes);
     temp.splice(dragIndex, 1);
     temp.splice(dropIndex, 0, value);
-    console.log(temp);
     dispatch(setSelectedPages(temp));
   };
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.PAGE,
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-    end: (item, monitor) => {
-      const dropRes = monitor.getDropResult();
-      if (item && dropRes) {
-        if (value !== dropRes.value) onDropped(dropRes.value);
-        else {
-          console.log("Not ");
-          console.log(value);
+  const [{ isDragging }, drag] = useDrag(
+    () => ({
+      type: ItemTypes.PAGE,
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+      end: (item, monitor) => {
+        const dropRes = monitor.getDropResult();
+        if (item && dropRes) {
+          if (value !== dropRes.value) onDropped(dropRes.value);
+          else {
+            console.log("Not ");
+            console.log(value);
+          }
         }
-      }
-    },
-  }),[selectedPages]);
+      },
+    }),
+    [selectedPages]
+  );
   return (
     <div
       ref={drag}
@@ -69,7 +69,7 @@ const DraggablePageCard = ({ index, value }) => {
           color: "black",
         }}
       >
-        {`Page ${index+1}`}
+        {`Page ${index + 1}`}
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ const uploadMiddleware = (req, res, next) => {
           fs.unlinkSync(file.path);
         });
 
-        return res.status(400).json({ errors });
+        return res.status(400).json({ message:errors[0] });
       }
 
       // Attach files to the request object

@@ -29,11 +29,14 @@ const ReorderComponent = () => {
         nums[i] = parseInt(nums[i]) - 1;
       }
       var res = nums.every(function (element) {
-        return typeof element === "number";
+        return typeof element === "number" && selectedPages.includes(element);
       });
-      if (res) {
+      if (res && nums.length===selectedPages.length) {
         // console.log((selectedPages));
-        if (Math.max(...nums) <= Math.max(...selectedPages) && Math.min(...nums) >= 0)
+        if (
+          Math.max(...nums) <= Math.max(...selectedPages) &&
+          Math.min(...nums) >= 0
+        )
           dispatch(setSelectedPages(nums));
         else {
           toast.error("Invalid page numbers");
@@ -100,7 +103,6 @@ const ReorderComponent = () => {
               margin: "10px",
               height: "40px",
               width: "100px",
-              
             }}
           >
             Reorder

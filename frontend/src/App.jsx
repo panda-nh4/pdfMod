@@ -45,7 +45,6 @@ const App = () => {
       { start: 210, end: 330 },
     ],
   };
-  console.log(window.matchMedia("(pointer: coarse)").matches);
   return (
     <DndProvider backend={backend} options={options}>
       <MyPreview />
