@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  localFilePath: null,
+  localFilePath: "",
   uploadedFileName: null,
   uploadedFileData: null,
   pagesArray: [],
@@ -32,7 +32,7 @@ const publicSlice = createSlice({
       state.selectedPages = action.payload;
     },
     resetPublicState: (state) => {
-      state.localFilePath = null;
+      state.localFilePath = "";
       state.uploadedFileName = null;
       state.uploadedFileData = null;
       state.pagesArray = [];
