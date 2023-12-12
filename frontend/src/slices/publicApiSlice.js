@@ -18,7 +18,15 @@ export const publicApiSlice = apiSlice.injectEndpoints({
         responseHandler: (response) => response.arrayBuffer(),
       }),
     }),
+    extract: builder.mutation({
+      query: (data) => ({
+        url: `${PUBLIC_URL}/extract`,
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useUploadMutation, useLazyViewFileQuery } = publicApiSlice;
+export const { useUploadMutation, useLazyViewFileQuery, useExtractMutation } =
+  publicApiSlice;

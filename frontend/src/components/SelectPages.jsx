@@ -42,7 +42,7 @@ const SelectPages = () => {
           <h2>Select Pages</h2>
         </div>
         <div style={{width:"90%", padding:"5px"}}>
-        <SelectedPagesTextComponent />
+        <SelectedPagesTextComponent textToDisplay={"Pages selected : "}/>
         </div>
         <div style={{ padding: "10px" }}>
           <Document

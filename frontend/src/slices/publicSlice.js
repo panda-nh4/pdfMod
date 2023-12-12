@@ -31,6 +31,14 @@ const publicSlice = createSlice({
     setSelectedPages: (state, action) => {
       state.selectedPages = action.payload;
     },
+    resetPublicState: (state) => {
+      state.localFilePath = null;
+      state.uploadedFileName = null;
+      state.uploadedFileData = null;
+      state.pagesArray = [];
+      state.selectedPages = [];
+      state.downloadLink = null;
+    },
   },
 });
 
@@ -41,6 +49,7 @@ export const {
   setDownloadLink,
   setUploadedFileData,
   setSelectedPages,
+  resetPublicState,
 } = publicSlice.actions;
 
 export default publicSlice.reducer;

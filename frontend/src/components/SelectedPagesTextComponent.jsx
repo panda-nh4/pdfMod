@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-const SelectedPagesTextComponent = () => {
+const SelectedPagesTextComponent = ({textToDisplay}) => {
   const selectedPages = useSelector((state) => state.public.selectedPages);
   const getSelectedPagesText = () => {
     if (selectedPages === null) return "";
@@ -19,7 +19,7 @@ const SelectedPagesTextComponent = () => {
         width: "100%",
       }}
     >
-      <h4>{`Selected Pages: ${getSelectedPagesText()}`}</h4>
+      <h4>{`${textToDisplay} ${getSelectedPagesText()}`}</h4>
     </div>
   );
 };

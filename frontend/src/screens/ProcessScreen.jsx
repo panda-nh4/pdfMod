@@ -13,7 +13,8 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { useLazyViewFileQuery } from "../slices/publicApiSlice";
-import { setUploadedFileData } from "../slices/publicSlice";
+import { resetPublicState, setUploadedFileData } from "../slices/publicSlice";
+import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
@@ -55,6 +56,10 @@ const ProcessScreen = () => {
   const uploadedFileName = useSelector(
     (state) => state.public.uploadedFileName
   );
+  const navigate=useNavigate()
+  const downloadLink = useSelector((state) => state.public.downloadLink);
+  const disableDownload =
+    activeStep === steps.length - 1 ? (downloadLink ? false : true) : false;
   const handleNext = async () => {
     if (activeStep == 0) {
       if (uploadedFileName === null) {
@@ -80,9 +85,15 @@ const ProcessScreen = () => {
       }
     } else if (activeStep == 2) {
       console.log("Reorder part");
-      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      if (selectedPages === null || selectedPages.length === 0)
+        toast.error("Select at least one page.");
+      else {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+      }
     } else if (activeStep == 3) {
       console.log("Download part");
+      if (downloadLink === null) {
+      }
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -94,7 +105,10 @@ const ProcessScreen = () => {
   };
 
   const handleReset = () => {
+    dispatch(resetPublicState())
     setActiveStep(0);
+    navigate("/")
+    
   };
 
   return (
@@ -112,12 +126,11 @@ const ProcessScreen = () => {
       </Stepper>
       <div>
         {activeStep === steps.length ? (
-          <div>
+          <div >
             <Button
               onClick={handleReset}
               className={classes.button}
-              component={Link}
-              to="/"
+              
             >
               Start Again
             </Button>
@@ -138,14 +151,20 @@ const ProcessScreen = () => {
               >
                 Back
               </Button>
-              <Button
+              
+                {activeStep === steps.length - 1 ? <Button
                 variant="contained"
                 color="primary"
                 onClick={handleNext}
                 className={classes.button}
-              >
-                {activeStep === steps.length - 1 ? "Finish" : "Next"}
-              </Button>
+                disabled={disableDownload}
+                href={downloadLink}
+              >Download</Button> :<Button
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              className={classes.button}
+            > Next</Button>}
             </div>
             <div>{getStepContent(activeStep)}</div>
           </div>

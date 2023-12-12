@@ -96,11 +96,11 @@ const extractPages = expressAsyncHandler(async (req, res) => {
   const protocol = process.env.DEV === "true" ? "http://" : "https://";
   res
     .status(200)
-    .json(
+    .json({downloadLink:
       protocol +
         req.get("host") +
         "/api/file/download?fileName=" +
-        encodeURIComponent(req.body.fileName.slice(0, -4) + " - Modified.pdf")
+        encodeURIComponent(req.body.fileName.slice(0, -4) + " - Modified.pdf")}
     );
 });
 

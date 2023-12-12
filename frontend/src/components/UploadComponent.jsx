@@ -3,7 +3,7 @@ import { Button, CircularProgress } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useUploadMutation } from "../slices/publicApiSlice";
-import { setLocalFilePath, setUploaded } from "../slices/publicSlice";
+import { resetPublicState, setLocalFilePath, setUploaded } from "../slices/publicSlice";
 import { toast } from "react-toastify";
 const UploadComponent = () => {
   const [fileName, setFileName] = useState("");
@@ -19,6 +19,7 @@ const UploadComponent = () => {
 
       formData.append("files", fileName[0]);
       try {
+        dispatch(resetPublicState())
         const res = await upload(formData).unwrap();
         toast.success("File uploaded");
         dispatch(setUploaded(res.new_name));
