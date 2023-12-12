@@ -8,7 +8,7 @@ const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({serializableCheck:false}).concat(apiSlice.middleware),
-  devTools: true,
+  devTools: process.env.Dev==="true",
 });
 
 export default store;
