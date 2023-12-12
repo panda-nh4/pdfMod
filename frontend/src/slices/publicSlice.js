@@ -34,6 +34,7 @@ const publicSlice = createSlice({
     resetPublicState: (state) => {
       state.localFilePath = "";
       state.uploadedFileName = null;
+      if (state.uploadedFileData) URL.revokeObjectURL(state.uploadedFileData);
       state.uploadedFileData = null;
       state.pagesArray = [];
       state.selectedPages = [];
