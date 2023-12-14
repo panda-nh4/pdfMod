@@ -9,9 +9,13 @@ import {
   setUploaded,
 } from "../slices/publicSlice";
 import { toast } from "react-toastify";
+import { useUserUploadMutation } from "../slices/userApiSlice";
 const UploadComponent = () => {
   const [fileName, setFileName] = useState([]);
-  const [upload, { isLoading }] = useUploadMutation();
+  const name = useSelector((state) => state.user.name);
+  const [upload, { isLoading }] = name
+    ? useUserUploadMutation()
+    : useUploadMutation();
   const dispatch = useDispatch();
   const localFilePath = useSelector((state) => state.public.localFilePath);
   const uploadFiles = async () => {
@@ -30,9 +34,15 @@ const UploadComponent = () => {
         dispatch(setUploaded(res.new_name));
         dispatch(setLocalFilePath(fileName[0].name));
       } catch (err) {
-        if (err.status === 500) toast.error("Server Error");
-        else if (err.status === 413) toast.error("File too large Error");
-        else toast.error(err?.data?.message || err.error);
+        if (err.status >= 500) toast.error("Server Error");
+        else {
+          if (err.status === 401) toast.error("Unauthorised. Login in first.");
+          else if (err.status === 413) toast.error("File too large");
+          else
+            toast.error(
+              err?.data?.message || err.error || `${err.status} Error`
+            );
+        }
       }
     }
   };

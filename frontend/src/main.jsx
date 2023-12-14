@@ -12,12 +12,20 @@ import {
 } from "react-router-dom";
 import LandingScreen from "./screens/LandingScreen.jsx";
 import ProcessScreen from "./screens/ProcessScreen.jsx";
+import UserLogin from "./screens/UserLoginScreen.jsx";
+import RegisterUser from "./screens/RegisterUserScreen.jsx";
+import UserCreateFile from "./screens/UserCreateFileScreen.jsx";
+import EditScreen from "./screens/UserEditFileScreen.jsx";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
       <Route path="/" index="true" element={<LandingScreen />} />
       <Route path="/start" element={<ProcessScreen />} />
+      <Route path="/login" element={<UserLogin />} />
+      <Route path="/register" element={<RegisterUser />} />
+      <Route path="/create" element={<UserCreateFile />} />
+      <Route path="/edit" element={<EditScreen />} />
     </Route>
   )
 );

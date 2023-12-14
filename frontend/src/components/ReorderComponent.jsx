@@ -74,7 +74,7 @@ const ReorderComponent = () => {
         </div>
         <div style={{ width: "90%", padding: "5px" }}>
           <h4 style={{ marginLeft: "20px" }}>
-            Drag and drop to reorder or enter space separated values.
+            Drag and drop to reorder or enter page numbers (e.g: 1 2 3)
           </h4>
           <div
             style={{
@@ -88,12 +88,25 @@ const ReorderComponent = () => {
             <h4>{`Current page order : ${getSelectedPagesText()}`}</h4>
           </div>
           <TextField
-            variant="standard"
+            
             onChange={setTextVal}
+            
             label={"Enter new order"}
             style={{
               marginLeft: "20px",
               width: "250px",
+            }}
+            inputProps={{
+              sx: {
+                color: "black",
+                backgroundColor: "white",
+                borderRadius: "5px",
+              },
+            }}
+            InputLabelProps={{
+              sx: {
+                color: "#000",
+              },
             }}
           />
           <Button

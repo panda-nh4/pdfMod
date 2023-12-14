@@ -4,7 +4,7 @@ const initialState = {
   localFilePath: "",
   uploadedFileName: null,
   uploadedFileData: null,
-  pagesArray: [],
+  oldFileName: "",
   selectedPages: [],
   downloadLink: null,
 };
@@ -22,8 +22,8 @@ const publicSlice = createSlice({
     setUploadedFileData: (state, action) => {
       state.uploadedFileData = action.payload;
     },
-    setPageArray: (state, action) => {
-      state.pagesArray = action.payload;
+    setOldFileName: (state, action) => {
+      state.oldFileName = action.payload;
     },
     setDownloadLink: (state, action) => {
       state.downloadLink = action.payload;
@@ -31,12 +31,18 @@ const publicSlice = createSlice({
     setSelectedPages: (state, action) => {
       state.selectedPages = action.payload;
     },
+    resetDownloadLink: (state, action) => {
+      state.downloadLink = null;
+    },
+    setUploadedFileName: (state, action) => {
+      state.uploadedFileName = action.payload;
+    },
     resetPublicState: (state) => {
       state.localFilePath = "";
       state.uploadedFileName = null;
       if (state.uploadedFileData) URL.revokeObjectURL(state.uploadedFileData);
       state.uploadedFileData = null;
-      state.pagesArray = [];
+      state.oldFileName = "";
       state.selectedPages = [];
       state.downloadLink = null;
     },
@@ -46,11 +52,13 @@ const publicSlice = createSlice({
 export const {
   setLocalFilePath,
   setUploaded,
-  setPageArray,
+  setOldFileName,
   setDownloadLink,
   setUploadedFileData,
   setSelectedPages,
   resetPublicState,
+  resetDownloadLink,
+  setUploadedFileName,
 } = publicSlice.actions;
 
 export default publicSlice.reducer;

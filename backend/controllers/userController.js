@@ -10,6 +10,7 @@ import { PDFDocument } from "pdf-lib";
 import mv from "mv";
 import fs from "fs";
 import mongoose from "mongoose";
+import _ from "underscore";
 const userLogin = expressAsyncHandler(async (req, res) => {
   const { email, password } = req.body;
   const checkExists = await User.findOne({ email });
@@ -18,7 +19,8 @@ const userLogin = expressAsyncHandler(async (req, res) => {
     res.status(201).json({
       name: checkExists.name,
       email: checkExists.email,
-      address: checkExists.address,
+      files: checkExists.files,
+      shared: checkExists.shared,
     });
   } else {
     res.status(401);
@@ -66,6 +68,8 @@ const registerUser = expressAsyncHandler(async (req, res) => {
     res.status(201).json({
       name: userCreated.name,
       email: userCreated.email,
+      shared: [],
+      files: [],
     });
   } else {
     res.status(400);
@@ -79,13 +83,6 @@ const userLogout = expressAsyncHandler(async (req, res) => {
     expires: new Date(0),
   });
   res.status(200).json("logged out");
-});
-
-const getUser = expressAsyncHandler(async (req, res) => {
-  res.status(200).json({
-    name: req.user.name,
-    email: req.user.email,
-  });
 });
 
 const updateUser = expressAsyncHandler(async (req, res) => {
@@ -162,7 +159,7 @@ const userView = expressAsyncHandler(async (req, res) => {
     req.query.fileName
   );
   try {
-    var data = fs.readFileSync(file);
+    var data = await fs.promises.readFile(file);
     res.contentType("application/pdf");
     res.send(data);
   } catch (error) {
@@ -174,7 +171,7 @@ const userExtract = expressAsyncHandler(async (req, res) => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = dirname(__filename);
   const fileName = req.body.fileName;
-  const newName = req.body.newName || crypto.randomUUID();
+  const newName = crypto.randomUUID();
   const pagesAndOrder = req.body.pageArray;
   const file = path.join(
     __dirname,
@@ -194,11 +191,16 @@ const userExtract = expressAsyncHandler(async (req, res) => {
   );
   let fileBytes;
   try {
-    fileBytes = fs.readFileSync(file);
+    fileBytes = await fs.promises.readFile(file);
   } catch (err) {
     throw new Error("File not found.");
   }
-  const pdfDoc = await PDFDocument.load(fileBytes);
+  let pdfDoc;
+  try {
+    pdfDoc = await PDFDocument.load(fileBytes);
+  } catch {
+    throw new Error("Unable to read file");
+  }
   //   const pages = pdfDoc.getPages()
   const newPdfDoc = await PDFDocument.create();
   try {
@@ -211,18 +213,24 @@ const userExtract = expressAsyncHandler(async (req, res) => {
   } catch (err) {
     throw new Error("Bad indices");
   }
-  const pdfBytes = await newPdfDoc.save();
-  fs.writeFileSync(destFile, pdfBytes);
-  var fileId
+
+  try {
+    const pdfBytes = await newPdfDoc.save();
+    fs.writeFileSync(destFile, pdfBytes);
+  } catch (err) {
+    throw new Error("Unable to save file");
+  }
+  var fileId;
   try {
     const newFile = await File.create({
-      fileName: newName + ".pdf",
+      fileName: req.body.newName + ".pdf",
       filePath: destFile,
+      originalFileName: fileName,
       originalFilePath: file,
       pages: pagesAndOrder,
     });
     if (newFile) {
-      fileId=newFile._id.toString()
+      fileId = newFile._id.toString();
       req.user.files = [...req.user.files, newFile._id];
       try {
         await req.user.save();
@@ -231,30 +239,105 @@ const userExtract = expressAsyncHandler(async (req, res) => {
       }
     }
   } catch (err) {
-    if (err.code === 11000) {
-      const getFile = await File.findOneAndUpdate(
-        { filePath: destFile },
-        {
-          fileName: newName + ".pdf",
-          originalFilePath: file,
-          pages: pagesAndOrder,
-        }
-      );
-      fileId=getFile._id.toString()
-    } else {
-      throw new Error("DB error");
-    }
+    throw new Error("DB error");
   }
 
   const protocol = process.env.DEV === "true" ? "http://" : "https://";
-  res
-    .status(200)
-    .json(
+  res.status(200).json({
+    downloadLink:
       protocol +
-        req.get("host") +
-        "/api/user/download?fileId=" +
-        encodeURIComponent(fileId)
-    );
+      req.get("host") +
+      "/api/user/download?fileId=" +
+      encodeURIComponent(fileId),
+  });
+});
+
+const userUpdateFile = expressAsyncHandler(async (req, res) => {
+  const fileId = req.body.fileId;
+  const newName = req.body.newName;
+  const pagesAndOrder = req.body.pagesAndOrder;
+  const protocol = process.env.DEV === "true" ? "http://" : "https://";
+  if (!fileId || !newName || !pagesAndOrder) {
+    res.status(400);
+    throw new Error("One or more fields missing");
+  }
+
+  if (!req.user.files.includes(new mongoose.Types.ObjectId(fileId))) {
+    throw new Error("File does not exist for user.");
+  }
+  const file = await File.findById(fileId);
+
+  if (file) {
+    const destFile = file.filePath;
+    console.log(_.isEqual(file.pages, pagesAndOrder))
+    if (_.isEqual(file.pages, pagesAndOrder)) {
+      const fileWithoutExt=file.fileName.substring(0,file.fileName.length-4)
+      if (newName === fileWithoutExt) {
+        res.status(400)
+        throw new Error("No change to file");
+      }
+      file.fileName = newName + ".pdf";
+      try {
+        await file.save();
+        res.status(200).json({
+          downloadLink:
+            protocol +
+            req.get("host") +
+            "/api/user/download?fileId=" +
+            encodeURIComponent(fileId),
+        });
+      } catch {
+        throw new Error("Unable to update");
+      }
+    } else {
+      let fileBytes;
+      try {
+        fileBytes = await fs.promises.readFile(file.originalFilePath);
+      } catch (err) {
+        throw new Error("File not found.");
+      }
+      try {
+        const pdfDoc = await PDFDocument.load(fileBytes);
+        const newPdfDoc = await PDFDocument.create();
+        try {
+          for (let i = 0; i < pagesAndOrder.length; i++) {
+            const [selectedPage] = await newPdfDoc.copyPages(pdfDoc, [
+              pagesAndOrder[i],
+            ]);
+            newPdfDoc.addPage(selectedPage);
+          }
+        } catch (err) {
+          throw new Error("Bad indices");
+        }
+        const pdfBytes = await newPdfDoc.save();
+        try {
+          await fs.promises.writeFile(destFile, pdfBytes);
+        } catch (err) {
+          throw new Error("Unable to save file");
+        }
+        file.pages = pagesAndOrder;
+        file.fileName = newName + ".pdf";
+      } catch {
+        throw new Error("Bad file");
+      }
+
+      try {
+        await file.save();
+      } catch (err) {
+        throw new Error("Unable to update");
+      }
+      
+      res.status(200).json({
+        downloadLink:
+          protocol +
+          req.get("host") +
+          "/api/user/download?fileId=" +
+          encodeURIComponent(fileId),
+      });
+    }
+  } else {
+    throw new Error("Invalid File ID.");
+  }
 });
 
 const userDownload = expressAsyncHandler(async (req, res) => {
@@ -277,23 +360,32 @@ const userDownload = expressAsyncHandler(async (req, res) => {
 });
 
 const getUserFiles = expressAsyncHandler(async (req, res) => {
-  res.status(200).json({ files: req.user.files });
+  const fileIds = req.user.files;
+  if (fileIds.length === 0) res.status(200).json({ files: [] });
+  else {
+    const fileDetails = await File.find({ _id: { $in: fileIds } }).select(
+      "_id fileName originalFileName pages"
+    );
+    if (fileDetails) {
+      res.status(200).json({ files: fileDetails });
+    } else {
+      throw new Error("DB error");
+    }
+  }
 });
 
 const getSharedFiles = expressAsyncHandler(async (req, res) => {
-  res.status(200).json({ files: req.user.shared });
-});
-
-const getFileName = expressAsyncHandler(async (req, res) => {
-  const fileId = req.query.fileId;
-  if (!req.user.files.includes(new mongoose.Types.ObjectId(fileId))) {
-    throw new Error("File does not exist for user.");
-  }
-  const file = await File.findById(fileId);
-  if (file) {
-    res.status(200).json({ fileName: file.fileName });
-  } else {
-    throw new Error("Invalid File ID.");
+  const fileIds = req.user.shared;
+  if (fileIds.length === 0) res.status(200).json({ files: [] });
+  else {
+    const fileDetails = await File.find({ _id: { $in: fileIds } }).select(
+      "_id fileName originalFileName pages"
+    );
+    if (fileDetails) {
+      res.status(200).json({ files: fileDetails });
+    } else {
+      throw new Error("DB error");
+    }
   }
 });
 
@@ -303,13 +395,15 @@ const shareFile = expressAsyncHandler(async (req, res) => {
     throw new Error("File does not exist for user.");
   }
   if (req.user.shared.includes(new mongoose.Types.ObjectId(fileId))) {
-    throw new Error("Already shared");
+    res.status(400)
+    throw new Error("File is already shared");
   }
   req.user.shared = [...req.user.shared, new mongoose.Types.ObjectId(fileId)];
   try {
     await req.user.save();
     res.status(200).send({ shared: fileId });
   } catch (e) {
+    res.status(404)
     throw new Error("Unable to share file");
   }
 });
@@ -326,15 +420,22 @@ const stopShare = expressAsyncHandler(async (req, res) => {
       throw new Error("Unable to stop sharing file");
     }
   } else {
+    res.status(400)
     throw new Error("File is not being shared.");
   }
 });
 
 const deleteFile = expressAsyncHandler(async (req, res) => {
   const fileId = req.body.fileId;
+  if (!fileId) {
+    console.log(fileId);
+    res.status(400);
+    throw new Error("Bad File Id");
+  }
   const fileobj = new mongoose.Types.ObjectId(fileId);
   if (req.user.shared.includes(fileobj)) {
-    throw new Error("File is being shared.");
+    res.status(400);
+    throw new Error("File is being shared. Stop sharing to delete.");
   }
   if (req.user.files.includes(fileobj)) {
     const file = await File.findById(fileId);
@@ -360,9 +461,11 @@ const deleteFile = expressAsyncHandler(async (req, res) => {
         throw new Error("Unable to delete file");
       }
     } catch (error) {
+      res.status(404);
       throw new Error("File does not exist");
     }
   } else {
+    res.status(404);
     throw new Error("File does not exist for user.");
   }
 });
@@ -381,6 +484,7 @@ const getShareLink = expressAsyncHandler(async (req, res) => {
       encodeURIComponent(fileId);
     res.status(200).json({ link: shareLink });
   } else {
+    res.status(400)
     throw new Error("File is not being shared.");
   }
 });
@@ -389,7 +493,6 @@ export {
   userLogin,
   userLogout,
   registerUser,
-  getUser,
   updateUser,
   userUpload,
   userView,
@@ -397,9 +500,9 @@ export {
   userDownload,
   getUserFiles,
   getSharedFiles,
-  getFileName,
   shareFile,
   stopShare,
   deleteFile,
   getShareLink,
+  userUpdateFile,
 };

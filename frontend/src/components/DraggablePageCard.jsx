@@ -25,10 +25,6 @@ const DraggablePageCard = ({ index, value }) => {
         const dropRes = monitor.getDropResult();
         if (item && dropRes) {
           if (value !== dropRes.value) onDropped(dropRes.value);
-          else {
-            console.log("Not ");
-            console.log(value);
-          }
         }
       },
     }),

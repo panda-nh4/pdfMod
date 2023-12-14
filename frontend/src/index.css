@@ -1,0 +1,6 @@
+#div-fName {
+  display: inline-block;
+  max-width: calc(50%);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

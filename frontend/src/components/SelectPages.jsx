@@ -3,7 +3,7 @@ import PageCard from "./PageCard";
 import Grid from "@mui/material/Grid";
 import { pdfjs, Document, Page } from "react-pdf";
 import { useDispatch, useSelector } from "react-redux";
-import { setPageArray } from "../slices/publicSlice";
+// import { setPageArray } from "../slices/publicSlice";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import SelectedPagesTextComponent from "./SelectedPagesTextComponent";
@@ -17,7 +17,7 @@ const SelectPages = () => {
   const dispatch = useDispatch();
   const [pages, setPages] = useState([]);
   const loadedDoc = (numPages) => {
-    dispatch(setPageArray([...Array(numPages).keys()]));
+    // dispatch(setPageArray([...Array(numPages).keys()]));
     setPages([...Array(numPages).keys()]);
   };
   return (

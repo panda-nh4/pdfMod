@@ -51,7 +51,7 @@ const viewFile = expressAsyncHandler(async (req, res) => {
     req.query.fileName
   );
   try {
-    var data = fs.readFileSync(file);
+    var data = await fs.promises.readFile(file);
     res.contentType("application/pdf");
     res.send(data);
   } catch (error) {
@@ -74,11 +74,16 @@ const extractPages = expressAsyncHandler(async (req, res) => {
   );
   let fileBytes;
   try {
-    fileBytes = fs.readFileSync(file);
+    fileBytes = await fs.promises.readFile(file);
   } catch (err) {
     throw new Error("File not found.");
   }
-  const pdfDoc = await PDFDocument.load(fileBytes);
+  let pdfDoc;
+  try {
+    pdfDoc = await PDFDocument.load(fileBytes);
+  } catch {
+    throw new Error("Unable to load file");
+  }
   //   const pages = pdfDoc.getPages()
   const newPdfDoc = await PDFDocument.create();
   try {
@@ -91,22 +96,21 @@ const extractPages = expressAsyncHandler(async (req, res) => {
   } catch (err) {
     throw new Error("Bad indices");
   }
-  
-  const pdfBytes = await newPdfDoc.save();
-  try{
-  fs.writeFileSync(destFile, pdfBytes);}
-  catch(err){
-    throw new Error("Unable to write to file.")
+
+  try {
+    const pdfBytes = await newPdfDoc.save();
+    fs.writeFileSync(destFile, pdfBytes);
+  } catch (err) {
+    throw new Error("Unable to write to file.");
   }
   const protocol = process.env.DEV === "true" ? "http://" : "https://";
-  res
-    .status(200)
-    .json({downloadLink:
+  res.status(200).json({
+    downloadLink:
       protocol +
-        req.get("host") +
-        "/api/file/download?fileName=" +
-        encodeURIComponent(req.body.fileName.slice(0, -4) + " - Modified.pdf")}
-    );
+      req.get("host") +
+      "/api/file/download?fileName=" +
+      encodeURIComponent(req.body.fileName.slice(0, -4) + " - Modified.pdf"),
+  });
 });
 
 const downloadFile = expressAsyncHandler(async (req, res) => {

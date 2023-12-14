@@ -23,8 +23,12 @@ const DownloadComponent = () => {
       const res = await extract(body).unwrap();
       dispatch(setDownloadLink(res.downloadLink));
     } catch (err) {
-      if (err.status === 500) toast.error("Server Error");
-      else toast.error(err?.data?.message || err.error);
+      if (err.status >= 500) toast.error("Server Error");
+      else {
+        if (err.status === 401) toast.error("Unauthorised. Login in first.");
+        else
+          toast.error(err?.data?.message || err.error || `${err.status} Error`);
+      }
     }
   };
 
@@ -63,7 +67,12 @@ const DownloadComponent = () => {
         {gotLink ? (
           <h2>Click download to download generated PDF.</h2>
         ) : (
-          <Button onClick={()=>generateLink()} style={{ backgroundColor: "white" }}>Generate PDF!</Button>
+          <Button
+            onClick={() => generateLink()}
+            style={{ backgroundColor: "white" }}
+          >
+            Generate PDF!
+          </Button>
         )}
       </div>
       <div

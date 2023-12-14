@@ -11,6 +11,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { usePreview } from "react-dnd-preview";
+import './index.css'
 const MyPreview = () => {
   const preview = usePreview();
   if (!preview.display) {
@@ -45,6 +46,7 @@ const App = () => {
       { start: 210, end: 330 },
     ],
   };
+
   return (
     <DndProvider backend={backend} options={options}>
       <MyPreview />

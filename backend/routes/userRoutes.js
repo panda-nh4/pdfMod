@@ -1,10 +1,8 @@
 import express from "express";
 import {
   deleteFile,
-  getFileName,
   getShareLink,
   getSharedFiles,
-  getUser,
   getUserFiles,
   registerUser,
   shareFile,
@@ -14,6 +12,7 @@ import {
   userExtract,
   userLogin,
   userLogout,
+  userUpdateFile,
   userUpload,
   userView,
 } from "../controllers/userController.js";
@@ -24,7 +23,6 @@ const router = express.Router();
 router.post("/login", userLogin);
 router.post("/logout", userLogout);
 router.post("/register", registerUser);
-router.get("/profile", protectRoute, getUser);
 router.put("/update", protectRoute, updateUser);
 router.post("/upload", protectRoute, uploadMiddleware, userUpload);
 router.get("/view", protectRoute, userView);
@@ -34,8 +32,8 @@ router.get("/files", protectRoute, getUserFiles);
 router.post("/share", protectRoute, shareFile);
 router.post("/stopShare", protectRoute, stopShare);
 router.get("/shared", protectRoute, getSharedFiles);
-router.get("/getFileName", protectRoute, getFileName);
 router.get("/getShareLink", protectRoute, getShareLink);
 router.post("/delete", protectRoute, deleteFile);
+router.post("/updateFile",protectRoute,userUpdateFile)
 
 export default router;
