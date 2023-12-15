@@ -5,7 +5,6 @@ import UserShareBarComponent from "./UserShareBarComponent";
 
 const UserShared = () => {
   const files = useSelector((state) => state.user.shared);
-  const dispatch = useDispatch();
   return (
     <div style={{ width: "100%" }}>
       <div
