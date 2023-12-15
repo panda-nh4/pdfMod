@@ -18,7 +18,7 @@ const EditDownloadComponent = () => {
   const [name, setName] = useState(oldName);
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const selectedPages = useSelector((state) => state.public.selectedPages);
-  const localFilePath=useSelector(state=>state.public.localFilePath)
+  const localFilePath = useSelector((state) => state.public.localFilePath);
   const [nameErrorText, setNameErrorText] = React.useState("");
   const dispatch = useDispatch();
   const [getShared, getSharedReq] = useLazyUserGetSharedQuery();
@@ -46,6 +46,7 @@ const EditDownloadComponent = () => {
   const gotLink = downloadLink ? true : false;
   const [extract, { isLoading }] = useUpdateFileMutation();
   const [getFiles] = useLazyUserGetFilesQuery();
+  const [getSharedFiles] = useLazyUserGetSharedQuery();
   const generateLink = async (e) => {
     e.preventDefault();
 
@@ -62,7 +63,9 @@ const EditDownloadComponent = () => {
         const res = await extract(body).unwrap();
         dispatch(setDownloadLink(res.downloadLink));
         const res1 = await getFiles().unwrap();
+        const res2 = await getSharedFiles().unwrap();
         dispatch(setFiles(res1));
+        dispatch(setSharedFiles(res2));
       } catch (err) {
         if (err.status >= 500) toast.error("Server Error");
         else {
