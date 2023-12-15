@@ -31,13 +31,13 @@ const UserFileBarComponent = ({ fileData, isShared }) => {
   const [fileDeleteCall, deleteReq] = useDeleteFileMutation();
   const [getFiles, getFileReq] = useLazyUserGetFilesQuery();
   const [view] = useLazyUserViewFileQuery();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const deleteFile = async () => {
     try {
       const res = await fileDeleteCall({ fileId: fileData._id }).unwrap();
       const res1 = await getFiles().unwrap();
       dispatch(setFiles(res1));
-      toast("File deleted");
+      toast.success("File deleted");
     } catch (err) {
       if (err.status >= 500) toast.error("Server Error");
       else {
@@ -57,8 +57,8 @@ const UserFileBarComponent = ({ fileData, isShared }) => {
       dispatch(setSelectedPages(fileData.pages));
       dispatch(setUploadedFileName(fileData.fileName));
       dispatch(setLocalFilePath(fileData._id));
-      dispatch(setOldFileName(fileData.fileName.split('.')[0]))
-      navigate('/edit')
+      dispatch(setOldFileName(fileData.fileName.split(".")[0]));
+      navigate("/edit");
     } catch (err) {
       if (err.status >= 500) toast.error("Server Error");
       else {
