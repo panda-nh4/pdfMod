@@ -1,7 +1,7 @@
 # PDFMod
 An easy to use react app to extract or re-order pages from a pdf document. \
-You can create an account to share or edit the modified PDFs. A live version of the app can be found [here](https://p4ndanh4.shop/).
-
+You can create an account to share or edit the modified PDFs. A live version of the app can be found [here](https://p4ndanh4.shop/).\
+[](https://github.com/panda-nh4/pdfMod/blob/main/Screenshots/Desktop/1.png)
 
 ## Install
 1. Clone repo
