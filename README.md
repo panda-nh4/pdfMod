@@ -26,18 +26,18 @@ cd pdfMod
 ```
 npm i
 ```
-5. Rename 'sample.env' to '.env' after filling setting values in it.
+4. Rename 'sample.env' to '.env' after filling setting values in it.
   > sample.env -> .env
-7. Change directory to frontend Install frontend packages
+5. Change directory to frontend Install frontend packages
 ```
 cd frontend;
 npm i
 ```
-8. Build frontend
+6. Build frontend
 ```
 npm run build
 ```
-9. Go back to pdfMod folder and start server by
+7. Go back to pdfMod folder and start server by
 ```
 cd ..;
 npm run server
