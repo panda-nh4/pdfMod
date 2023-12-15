@@ -97,6 +97,7 @@ const userLogout = expressAsyncHandler(async (req, res) => {
     // set jwt to "" and expire cookie
     httpOnly: true,
     expires: new Date(0),
+    sameSite: "strict",
   });
   res.status(200).json("logged out");
 });
@@ -390,10 +391,8 @@ const userDownload = expressAsyncHandler(async (req, res) => {
 // Returns file info array
 const getUserFiles = expressAsyncHandler(async (req, res) => {
   const fileIds = req.user.files;
-  if (fileIds.length === 0)
-    res
-      .status(200)
-      .json({ files: [] }); // if user file list is empty return empty array
+  if (fileIds.length === 0) res.status(200).json({ files: [] });
+  // if user file list is empty return empty array
   else {
     const fileDetails = await File.find({ _id: { $in: fileIds } }).select(
       //for all files in user file list, get file details from DB
@@ -413,11 +412,10 @@ const getUserFiles = expressAsyncHandler(async (req, res) => {
 const getSharedFiles = expressAsyncHandler(async (req, res) => {
   const fileIds = req.user.shared;
   if (fileIds.length === 0)
-    res
-      .status(200)
-      .json({
-        files: [],
-      }); // if user shared file list is empty return empty array
+    res.status(200).json({
+      files: [],
+    });
+  // if user shared file list is empty return empty array
   else {
     const fileDetails = await File.find({ _id: { $in: fileIds } }).select(
       //for all files in user shared file list, get file details from DB
