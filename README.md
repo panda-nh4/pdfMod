@@ -50,6 +50,7 @@ npm run server
 + jsonwebtoken package for authentication
 + bcrypt for hashing passwords
 + pdf-lib for creating and modifying PDFs
++ API Docs [here](API%20Documentation/Public%20API%20Docs.md)
 
 ## Frontend
 + React
