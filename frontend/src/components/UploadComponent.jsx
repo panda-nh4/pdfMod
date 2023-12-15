@@ -21,6 +21,8 @@ const UploadComponent = () => {
   const uploadFiles = async () => {
     if (fileName.length === 0) {
       toast.error("Select a file first.");
+    } else if (fileName[0].name.length>3 && fileName[0].name.slice(-3)!=="pdf") {
+      toast.error("Invalid file");
     } else if (localFilePath === fileName[0].name) {
       toast.error("File already uploaded.");
     } else {
