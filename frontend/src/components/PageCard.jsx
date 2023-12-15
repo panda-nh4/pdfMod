@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Page } from "react-pdf";
 import { setSelectedPages } from "../slices/publicSlice";
+// Component to render a PDF page in selectPagesScreen. Selecting changes background color to blue
 const PageCard = ({ index }) => {
   const selectedPages = useSelector((state) => state.public.selectedPages);
   const borderSelectedColor = selectedPages.includes(index)

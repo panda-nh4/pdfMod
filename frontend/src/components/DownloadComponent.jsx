@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useExtractMutation } from "../slices/publicApiSlice";
 import { setDownloadLink } from "../slices/publicSlice";
 import { toast } from "react-toastify";
+
+// Download file component for non-users
 const DownloadComponent = () => {
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const selectedPages = useSelector((state) => state.public.selectedPages);

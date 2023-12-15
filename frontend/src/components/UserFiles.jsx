@@ -5,6 +5,7 @@ import UserFileBarComponent from "./UserFileBarComponent";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { resetPublicState } from "../slices/publicSlice";
+// Contains rows of UserFileBarComponents to display user files
 const UserFIles = () => {
   const files = useSelector((state) => state.user.files);
   const shared = useSelector((state) => state.user.shared);

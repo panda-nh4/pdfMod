@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Stack from "@mui/material/Stack";
 import UserShareBarComponent from "./UserShareBarComponent";
-
+// Same as UseFiles but for shared user files
 const UserShared = () => {
   const files = useSelector((state) => state.user.shared);
   return (

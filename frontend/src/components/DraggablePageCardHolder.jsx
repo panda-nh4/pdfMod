@@ -3,6 +3,7 @@ import DraggablePageCard from "./DraggablePageCard";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../ItemTypes";
 import { useSelector } from "react-redux";
+// Component that allows DraggablePageCard to drop into 
 const DraggablePageCardHolder = ({ index, value }) => {
     const selectedPages = useSelector((state) => state.public.selectedPages);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({

@@ -19,11 +19,11 @@ const UploadComponent = () => {
   const dispatch = useDispatch();
   const localFilePath = useSelector((state) => state.public.localFilePath);
   const uploadFiles = async () => {
-    if (fileName.length === 0) {
+    if (fileName.length === 0) {  // Check if a file is selected
       toast.error("Select a file first.");
-    } else if (fileName[0].name.length>3 && fileName[0].name.slice(-3)!=="pdf") {
+    } else if (fileName[0].name.length>3 && fileName[0].name.slice(-3)!=="pdf") { // Check if selected document is actually PDF
       toast.error("Invalid file");
-    } else if (localFilePath === fileName[0].name) {
+    } else if (localFilePath === fileName[0].name) {  // Check if uploadedfile is the selected file
       toast.error("File already uploaded.");
     } else {
       var formData = new FormData();

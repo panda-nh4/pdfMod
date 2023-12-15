@@ -1,5 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
+// Component to display the selected pages
 const SelectedPagesTextComponent = ({textToDisplay}) => {
   const selectedPages = useSelector((state) => state.public.selectedPages);
   const getSelectedPagesText = () => {

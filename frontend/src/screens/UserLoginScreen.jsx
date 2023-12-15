@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setFiles, setLoginValues, setSharedFiles } from "../slices/userSlice";
 import { NavLink, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-
+// Similar to RegisterUserScreen
 const UserLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

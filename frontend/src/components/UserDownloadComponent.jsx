@@ -12,6 +12,7 @@ import {
   useUserExtractMutation,
 } from "../slices/userApiSlice";
 import { setFiles, setSharedFiles } from "../slices/userSlice";
+//Component for logged in users to download or share after generating on userCreateFileScren
 const UserDownloadComponent = () => {
   const [name, setName] = useState("");
   const downloadLink = useSelector((state) => state.public.downloadLink);

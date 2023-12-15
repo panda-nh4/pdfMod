@@ -23,7 +23,7 @@ import {
   setUploadedFileName,
 } from "../slices/publicSlice";
 import { useNavigate } from "react-router-dom";
-
+// A row-like component to view user files. Possilbe actions are (share, edit ,delete, download) 
 const UserFileBarComponent = ({ fileData, isShared }) => {
   const dispatch = useDispatch();
   const [getShared, getSharedReq] = useLazyUserGetSharedQuery();

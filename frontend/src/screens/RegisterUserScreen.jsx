@@ -34,28 +34,28 @@ const RegisterUser = () => {
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-    if (!name) {
+    const isValidEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g; // Regex for email validation
+    if (!name) {  //check if name is entered
       setNameErrorText("Please enter your name");
     } else {
       setNameErrorText("");
     }
-    if (!email || !email.match(isValidEmail)) {
+    if (!email || !email.match(isValidEmail)) { //check if email is entered and validate it
       setEmailErrorText("Please enter valid email");
     } else {
       setEmailErrorText("");
     }
-    if (!password) {
+    if (!password) {  //check if password is entered
       setPasswordErrorText("Please enter password");
     } else {
       setPasswordErrorText("");
     }
-    if (rePassword !== password || !rePassword) {
+    if (rePassword !== password || !rePassword) { //check if passwords match or has been entered
       setRePasswordErrorText("Passwords do not match");
     } else {
       setRePasswordErrorText("");
     }
-    const sendReq =
+    const sendReq = // send req to create new user
       name && email && password && !(rePassword !== password || !rePassword);
     if (sendReq) {
       const body = {

@@ -10,7 +10,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { usePreview } from "react-dnd-preview";
 import './index.css'
-const MyPreview = () => {
+const MyPreview = () => { // For drag and drop
   const preview = usePreview();
   if (!preview.display) {
     return null;
@@ -35,7 +35,7 @@ let theme = createTheme({
 });
 
 const App = () => {
-  const backend = window.matchMedia("(pointer: coarse)").matches
+  const backend = window.matchMedia("(pointer: coarse)").matches  // set react-dnd backend based on if touch input is available
     ? TouchBackend
     : HTML5Backend;
   const options = {

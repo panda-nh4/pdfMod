@@ -4,6 +4,8 @@ import { Page } from "react-pdf";
 import { setSelectedPages } from "../slices/publicSlice";
 import { useDrag, useDrop } from "react-dnd";
 import { ItemTypes } from "../ItemTypes";
+
+// Draggable Component to reorder Pages
 const DraggablePageCard = ({ index, value }) => {
   const dispatch = useDispatch();
   const selectedPages = useSelector((state) => state.public.selectedPages);

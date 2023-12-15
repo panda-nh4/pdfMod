@@ -3,7 +3,6 @@ import PageCard from "./PageCard";
 import Grid from "@mui/material/Grid";
 import { pdfjs, Document, Page } from "react-pdf";
 import { useDispatch, useSelector } from "react-redux";
-// import { setPageArray } from "../slices/publicSlice";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import SelectedPagesTextComponent from "./SelectedPagesTextComponent";
@@ -11,14 +10,13 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   "pdfjs-dist/build/pdf.worker.min.js",
   import.meta.url
 ).toString();
-
+// Component for page selection
 const SelectPages = () => {
   const pdfURI = useSelector((state) => state.public.uploadedFileData);
   const dispatch = useDispatch();
   const [pages, setPages] = useState([]);
   const loadedDoc = (numPages) => {
-    // dispatch(setPageArray([...Array(numPages).keys()]));
-    setPages([...Array(numPages).keys()]);
+  setPages([...Array(numPages).keys()]);
   };
   return (
     <div

@@ -13,6 +13,7 @@ import {
   useUserExtractMutation,
 } from "../slices/userApiSlice";
 import { setFiles, setSharedFiles } from "../slices/userSlice";
+// Component to allow logged in users to download or share pdf after editing on UserEditFileScreen
 const EditDownloadComponent = () => {
   const oldName = useSelector((state) => state.public.oldFileName);
   const [name, setName] = useState(oldName);

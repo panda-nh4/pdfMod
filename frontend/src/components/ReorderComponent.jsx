@@ -1,15 +1,14 @@
-import React from "react";
-import SelectedPagesTextComponent from "./SelectedPagesTextComponent";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Grid from "@mui/material/Grid";
 import { pdfjs, Document, Page } from "react-pdf";
-import PageCard from "./PageCard";
-import DraggablePageCard from "./DraggablePageCard";
 import DraggablePageCardHolder from "./DraggablePageCardHolder";
 import { Button, TextField } from "@mui/material";
 import { setSelectedPages } from "../slices/publicSlice";
 import { toast } from "react-toastify";
+// Reorder pageCard in grid form
 const ReorderComponent = () => {
+  const [textVal,setactualTextVal]=useState("")
   const pdfURI = useSelector((state) => state.public.uploadedFileData);
   const selectedPages = useSelector((state) => state.public.selectedPages);
   const dispatch = useDispatch();
@@ -20,10 +19,13 @@ const ReorderComponent = () => {
     selectedPages.map((_) => (stringArr = stringArr + `${_ + 1} `));
     return stringArr;
   };
-  var textVal = getSelectedPagesText();
+  useEffect(()=>{
+    setactualTextVal(getSelectedPagesText());
+  },[selectedPages])
+  
   const validateString = () => {
-    textVal = textVal.trim();
-    const nums = textVal.split(" ");
+    var newtextVal = textVal.trim();
+    const nums = newtextVal.split(" ");
     try {
       for (let i = 0; i < nums.length; i++) {
         nums[i] = parseInt(nums[i]) - 1;
@@ -31,12 +33,17 @@ const ReorderComponent = () => {
       var res = nums.every(function (element) {
         return typeof element === "number" && selectedPages.includes(element);
       });
-      if (res && nums.length===selectedPages.length) {
+      const makeSet = new Set(nums);
+      const allValsUnique = makeSet.size === selectedPages.length;
+      if (res && allValsUnique && nums.length === selectedPages.length) {
         if (
           Math.max(...nums) <= Math.max(...selectedPages) &&
           Math.min(...nums) >= 0
         )
-          dispatch(setSelectedPages(nums));
+          { 
+            setactualTextVal("")
+            dispatch(setSelectedPages(nums));
+          }
         else {
           toast.error("Invalid page numbers");
         }
@@ -48,7 +55,7 @@ const ReorderComponent = () => {
     }
   };
   const setTextVal = (e) => {
-    textVal = e.target.value;
+   setactualTextVal(e.target.value);
   };
   return (
     <div
@@ -87,9 +94,8 @@ const ReorderComponent = () => {
             <h4>{`Current page order : ${getSelectedPagesText()}`}</h4>
           </div>
           <TextField
-            
             onChange={setTextVal}
-            
+            value={textVal}
             label={"Enter new order"}
             style={{
               marginLeft: "20px",
@@ -102,7 +108,6 @@ const ReorderComponent = () => {
                 borderRadius: "5px",
               },
             }}
-            
           />
           <Button
             onClick={() => validateString()}
@@ -111,7 +116,7 @@ const ReorderComponent = () => {
               margin: "10px",
               height: "40px",
               width: "100px",
-              marginLeft:"20px"
+              marginLeft: "20px",
             }}
           >
             Reorder

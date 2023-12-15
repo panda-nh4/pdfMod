@@ -11,6 +11,7 @@ import {
 import copy from "copy-to-clipboard";
 import { toast } from "react-toastify";
 import { setSharedFiles } from "../slices/userSlice";
+// Sames as UserFileBarComponent but for shared files. Possible actions are (stop sharing, getshareLink) 
 const UserShareBarComponent = ({ fileData, index }) => {
   const dispatch = useDispatch();
   const [getFileLink, getLinkres] = useLazyGetFileShareLinkQuery();

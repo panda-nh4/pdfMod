@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import UploadComponent from "../components/UploadComponent";
 import SelectPages from "../components/SelectPages";
 import ReorderComponent from "../components/ReorderComponent";
-
+// Similar to Process Screen
 import {
   resetDownloadLink,
   resetPublicState,
@@ -134,7 +134,7 @@ const UserCreateFile = () => {
               }}
             >
               <Button
-                disabled={activeStep === 0 || !disableDownload}
+                disabled={activeStep === 0 || disableDownload}
                 onClick={handleBack}
               >
                 Back

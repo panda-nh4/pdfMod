@@ -12,7 +12,7 @@ import { setLogoutValues } from "../slices/userSlice";
 import { toast } from "react-toastify";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { resetPublicState } from "../slices/publicSlice";
 const Header = () => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -22,12 +22,15 @@ const Header = () => {
   const [logout] = useLogoutMutation();
   const dispatch = useDispatch();
   const handleMenu = (event) => {
+    //open dropdown menu
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
+    //close drop down menu
     setAnchorEl(null);
   };
   const logOut = async () => {
+    // Call logout api
     try {
       const res = await logout().unwrap();
       dispatch(setLogoutValues());
@@ -114,7 +117,7 @@ const Header = () => {
                 <MenuItem
                   onClick={() => {
                     handleClose();
-                    dispatch(resetPublicState())
+                    dispatch(resetPublicState());
                     navigate("/");
                   }}
                 >
@@ -123,7 +126,7 @@ const Header = () => {
                 <MenuItem
                   onClick={() => {
                     handleClose();
-                    dispatch(resetPublicState())
+                    dispatch(resetPublicState());
                     logOut();
                   }}
                 >

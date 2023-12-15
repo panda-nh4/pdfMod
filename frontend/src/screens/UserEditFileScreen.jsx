@@ -11,7 +11,7 @@ import { toast } from "react-toastify";
 import UploadComponent from "../components/UploadComponent";
 import SelectPages from "../components/SelectPages";
 import ReorderComponent from "../components/ReorderComponent";
-
+// Similar to UserCreateFileScreen but with out the upload step
 import {
   resetDownloadLink,
   resetPublicState,
@@ -46,9 +46,6 @@ const EditScreen = () => {
   const dispatch = useDispatch();
 
   const selectedPages = useSelector((state) => state.public.selectedPages);
-  const uploadedFileName = useSelector(
-    (state) => state.public.uploadedFileName
-  );
 
   const navigate = useNavigate();
   const downloadLink = useSelector((state) => state.public.downloadLink);
