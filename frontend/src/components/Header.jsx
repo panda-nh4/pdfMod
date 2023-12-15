@@ -55,7 +55,7 @@ const Header = () => {
             style={{ cursor: "pointer" }}
             sx={{ flexGrow: 1 }}
           >
-            PDF App
+            PDFMod
           </Typography>
           {email === "" ? (
             <Button
