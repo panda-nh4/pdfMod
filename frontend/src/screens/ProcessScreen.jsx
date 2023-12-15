@@ -99,7 +99,7 @@ const ProcessScreen = () => {
   };
 
   return (
-    <div style={{ width: "100%", margin: "5px" }}>
+    <div style={{ width: "100%", }}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};

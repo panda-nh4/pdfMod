@@ -3,7 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
@@ -64,7 +63,7 @@ const UserLogin = () => {
       } catch (err) {
         if (err.status >= 500) toast.error("Server Error");
         else {
-          if (err.status === 401) toast.error("Unauthorised. Login in first.");
+          if (err.status === 401) toast.error("E-mail or password invalid");
           else
             toast.error(
               err?.data?.message || err.error || `${err.status} Error`

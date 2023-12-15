@@ -19,6 +19,7 @@ import {
 } from "../slices/publicSlice";
 
 import EditDownloadComponent from "../components/EditDownloadComponent";
+import UnauthorisedScreen from "./UnauthorisedScreen";
 
 function getSteps() {
   return ["Select Pages", "Re-order Pages", "Done"];
@@ -38,6 +39,8 @@ function getStepContent(step) {
 }
 
 const EditScreen = () => {
+  const name = useSelector((state) => state.user.name);
+  if (!name) return <UnauthorisedScreen />;
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const dispatch = useDispatch();
@@ -118,7 +121,7 @@ const EditScreen = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleReset}
-                  disabled={(downloadLink?false:true)}
+                  disabled={downloadLink ? false : true}
                 >
                   Home
                 </Button>

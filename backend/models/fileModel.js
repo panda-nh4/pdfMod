@@ -1,5 +1,6 @@
 import mongoose, { mongo } from "mongoose";
 
+// Define file schema for DB
 const fileSchema = mongoose.Schema({
   fileName: {
     type: String,

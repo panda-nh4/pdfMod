@@ -65,7 +65,7 @@ const DownloadComponent = () => {
         }}
       >
         {gotLink ? (
-          <h2>Click download to download generated PDF.</h2>
+          <h2>Click download to save generated PDF.</h2>
         ) : (
           <Button
             onClick={() => generateLink()}

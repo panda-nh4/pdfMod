@@ -1,12 +1,10 @@
 import React from "react";
 import Header from "./components/Header";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import LandingScreen from "./screens/LandingScreen";
 import { Outlet } from "react-router-dom";
 import "@fontsource/roboto";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ProcessScreen from "./screens/ProcessScreen";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { TouchBackend } from "react-dnd-touch-backend";

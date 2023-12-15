@@ -18,6 +18,7 @@ import {
   setUploadedFileData,
 } from "../slices/publicSlice";
 import UserDownloadComponent from "../components/UserDownloadComponent";
+import UnauthorisedScreen from "./UnauthorisedScreen";
 
 function getSteps() {
   return ["Upload", "Select Pages", "Re-order Pages", "Done"];
@@ -39,6 +40,8 @@ function getStepContent(step) {
 }
 
 const UserCreateFile = () => {
+  const name = useSelector((state) => state.user.name);
+  if (!name) return <UnauthorisedScreen />;
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
   const dispatch = useDispatch();

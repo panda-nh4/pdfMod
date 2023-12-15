@@ -7,6 +7,8 @@ import {
 } from "../controllers/fileController.js";
 import { uploadMiddleware } from "../middleware/uploadMiddleware.js";
 
+// Set routes for /api/file endpoint
+
 const router = express.Router();
 
 router.post("/upload", uploadMiddleware, uploadFile);

@@ -7,7 +7,6 @@ import {
   registerUser,
   shareFile,
   stopShare,
-  updateUser,
   userDownload,
   userExtract,
   userLogin,
@@ -18,12 +17,13 @@ import {
 } from "../controllers/userController.js";
 import { protectRoute } from "../middleware/authMiddleware.js";
 import { uploadMiddleware } from "../middleware/uploadMiddleware.js";
+
+//  Set routes for /api/user endpoint
 const router = express.Router();
 
 router.post("/login", userLogin);
 router.post("/logout", userLogout);
 router.post("/register", registerUser);
-router.put("/update", protectRoute, updateUser);
 router.post("/upload", protectRoute, uploadMiddleware, userUpload);
 router.get("/view", protectRoute, userView);
 router.post("/extract", protectRoute, userExtract);

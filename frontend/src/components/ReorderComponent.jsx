@@ -103,11 +103,7 @@ const ReorderComponent = () => {
                 borderRadius: "5px",
               },
             }}
-            InputLabelProps={{
-              sx: {
-                color: "#000",
-              },
-            }}
+            
           />
           <Button
             onClick={() => validateString()}
@@ -116,6 +112,7 @@ const ReorderComponent = () => {
               margin: "10px",
               height: "40px",
               width: "100px",
+              marginLeft:"20px"
             }}
           >
             Reorder

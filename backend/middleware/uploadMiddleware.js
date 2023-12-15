@@ -3,7 +3,9 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+// Upload middleware using multer
 
+// set up temporary upload location
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const __filename = fileURLToPath(import.meta.url);
@@ -16,8 +18,10 @@ const storage = multer.diskStorage({
   },
 });
 
+//set up multer
 const upload = multer({ storage: storage });
 
+//function to handle uploads
 const uploadMiddleware = (req, res, next) => {
   upload.array("files")(req, res, (err) => {
     if (err) {
@@ -31,14 +35,14 @@ const uploadMiddleware = (req, res, next) => {
         errors.push("Too many files.");
       }
       files.forEach((file) => {
-        const allowedTypes = ["application/pdf"];
-        const maxSize = 200 * 1024 * 1024;
+        const allowedTypes = ["application/pdf"]; // Set allowed file types
+        const maxSize = 200 * 1024 * 1024;  // Set max file size to 200MB
 
-        if (!allowedTypes.includes(file.mimetype)) {
+        if (!allowedTypes.includes(file.mimetype)) { //Check if file is in allowed types
           errors.push(`Invalid file type: ${file.originalname}`);
         }
 
-        if (file.size > maxSize) {
+        if (file.size > maxSize) {  // Check file size 
           errors.push(`File too large: ${file.originalname}`);
         }
       });
@@ -50,7 +54,7 @@ const uploadMiddleware = (req, res, next) => {
           fs.unlinkSync(file.path);
         });
 
-        return res.status(400).json({ message:errors[0] });
+        return res.status(400).json({ message: errors[0] });
       }
 
       // Attach files to the request object

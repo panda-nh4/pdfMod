@@ -22,13 +22,12 @@ function CustomTabPanel(props) {
   );
 }
 const LandingScreen = () => {
-  const email = useSelector((state) => state.user.email);
+  const email = useSelector((state) => state.user.email); // check if user logged in
   const [value, setValue] = React.useState(0);
-
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  if (email !== "")
+  if (email !== "") // if logged in return component showing user files  
     return (
       <Box
         sx={{

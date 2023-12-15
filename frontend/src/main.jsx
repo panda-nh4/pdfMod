@@ -16,7 +16,9 @@ import UserLogin from "./screens/UserLoginScreen.jsx";
 import RegisterUser from "./screens/RegisterUserScreen.jsx";
 import UserCreateFile from "./screens/UserCreateFileScreen.jsx";
 import EditScreen from "./screens/UserEditFileScreen.jsx";
+import PageNoteFoundScreen from "./screens/PageNoteFoundScreen.jsx";
 
+// Create routes for react-router-dom
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
@@ -26,6 +28,7 @@ const router = createBrowserRouter(
       <Route path="/register" element={<RegisterUser />} />
       <Route path="/create" element={<UserCreateFile />} />
       <Route path="/edit" element={<EditScreen />} />
+      <Route path="*" element={<PageNoteFoundScreen/>} />
     </Route>
   )
 );
