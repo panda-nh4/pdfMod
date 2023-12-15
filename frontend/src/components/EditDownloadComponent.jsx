@@ -58,7 +58,6 @@ const EditDownloadComponent = () => {
         pagesAndOrder: selectedPages,
         newName: name,
       };
-      console.log(body)
       try {
         const res = await extract(body).unwrap();
         dispatch(setDownloadLink(res.downloadLink));

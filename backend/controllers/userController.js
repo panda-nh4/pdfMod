@@ -287,7 +287,6 @@ const userUpdateFile = expressAsyncHandler(async (req, res) => {
   if (file) {
     // check if file with fileId exists in DB
     const destFile = file.filePath;
-    console.log(_.isEqual(file.pages, pagesAndOrder));
     if (_.isEqual(file.pages, pagesAndOrder)) {
       // check if any changes are to be done
       const fileWithoutExt = file.fileName.substring(

@@ -32,7 +32,6 @@ const ReorderComponent = () => {
         return typeof element === "number" && selectedPages.includes(element);
       });
       if (res && nums.length===selectedPages.length) {
-        // console.log((selectedPages));
         if (
           Math.max(...nums) <= Math.max(...selectedPages) &&
           Math.min(...nums) >= 0
