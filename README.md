@@ -22,7 +22,7 @@ git clone https://github.com/panda-nh4/pdfMod.git
 ```
 cd pdfMod
 ```
-3. Install backend packages
+3. Install backend packages. Make sure npm and node are installed  
 ```
 npm i
 ```
