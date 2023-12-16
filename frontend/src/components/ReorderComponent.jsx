@@ -124,7 +124,7 @@ const ReorderComponent = () => {
         </div>
         <div style={{ padding: "10px" }}>
           <Document file={pdfURI}>
-            <Grid container columns={{ xs: 2, sm: 8, md: 24 }}>
+            <Grid container columns={{ xs: 2, sm: 8, md: 20 }}>
               {selectedPages.map((_, index) => (
                 <Grid item xs={2} sm={4} md={4} key={index}>
                   <DraggablePageCardHolder index={index} value={_} />

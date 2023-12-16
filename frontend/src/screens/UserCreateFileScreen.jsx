@@ -54,7 +54,7 @@ const UserCreateFile = () => {
   const navigate = useNavigate();
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const disableDownload =
-    activeStep === steps.length - 1 ? (downloadLink ? false : true) : false;
+    activeStep === steps.length - 1 ? (downloadLink ? true : false) : false;
 
   const handleNext = async () => {
     if (activeStep == 0) {
@@ -145,6 +145,7 @@ const UserCreateFile = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleReset}
+                  disabled={downloadLink?false:true}
                 >
                   Home
                 </Button>

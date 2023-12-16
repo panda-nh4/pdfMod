@@ -41,21 +41,21 @@ const ProcessScreen = () => {
     (state) => state.public.uploadedFileName
   );
   const navigate = useNavigate();
-
   const downloadLink = useSelector((state) => state.public.downloadLink);
   const disableDownload =
-    activeStep === steps.length - 1 ? (downloadLink ? false : true) : false; // used to disable buttons based on whether download link has been generated
+    activeStep === steps.length - 1 ? (downloadLink ? true : false) : false; // used to disable buttons based on whether download link has been generated
   const handleNext = async () => {
     if (activeStep == 0) {
-      if (uploadedFileName === null) {  // Check if dile has been uploaded
+      if (uploadedFileName === null) {
+        // Check if dile has been uploaded
         toast.error("Upload file first");
       } else {
         try {
           setActiveStep((prevActiveStep) => prevActiveStep + 1);
-          const res = await view({ fileName: uploadedFileName }).unwrap();  // Get uploaded file from server
-          const resBlob = new Blob([res]);  // Store uploaded file as blob
-          const pdfURI = URL.createObjectURL(resBlob);  // Create a link to the blob
-          dispatch(setUploadedFileData(pdfURI));  
+          const res = await view({ fileName: uploadedFileName }).unwrap(); // Get uploaded file from server
+          const resBlob = new Blob([res]); // Store uploaded file as blob
+          const pdfURI = URL.createObjectURL(resBlob); // Create a link to the blob
+          dispatch(setUploadedFileData(pdfURI));
         } catch (err) {
           if (err.status >= 500) toast.error("Server Error");
           else {
@@ -69,20 +69,22 @@ const ProcessScreen = () => {
         }
       }
     } else if (activeStep == 1) {
-      if (selectedPages === null || selectedPages.length === 0) // check if at least 1 page is selected
+      if (selectedPages === null || selectedPages.length === 0)
+        // check if at least 1 page is selected
         toast.error("Select at least one page.");
       else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
     } else if (activeStep == 2) {
-      if (selectedPages === null || selectedPages.length === 0) // check if at least 1 page is selected
+      if (selectedPages === null || selectedPages.length === 0)
+        // check if at least 1 page is selected
         toast.error("Select at least one page.");
       else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
       }
     } else if (activeStep == 3) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
-      window.open(downloadLink, "_blank");  // open generated pdf file link in new tab 
+      window.open(downloadLink, "_blank"); // open generated pdf file link in new tab
     } else {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -99,7 +101,7 @@ const ProcessScreen = () => {
   };
 
   return (
-    <div style={{ width: "100%", }}>
+    <div style={{ width: "100%" }}>
       <Stepper activeStep={activeStep}>
         {steps.map((label, index) => {
           const stepProps = {};
@@ -131,8 +133,8 @@ const ProcessScreen = () => {
               }}
             >
               <h2>
-                Congrats on modifying the PDF. Click below to modify
-                another one.
+                Congrats on modifying the PDF. Click below to modify another
+                one.
               </h2>
             </div>
 
@@ -161,7 +163,7 @@ const ProcessScreen = () => {
               }}
             >
               <Button
-                disabled={activeStep === 0 || !disableDownload}
+                disabled={activeStep === 0 || disableDownload}
                 onClick={handleBack}
               >
                 Back
@@ -172,7 +174,7 @@ const ProcessScreen = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleNext}
-                  disabled={disableDownload}
+                  disabled={downloadLink?false:true}
                 >
                   Download
                 </Button>
